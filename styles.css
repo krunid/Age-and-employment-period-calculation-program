@@ -8,12 +8,12 @@
     --text-secondary: #666666;
     
     /* สีพาสเทลสำหรับขอบรุ้ง */
-    --pastel-blue: #aed4f3;
-    --pastel-green: #b9e6c8;
-    --pastel-pink: #f4c6d9;
-    --pastel-yellow: #ffe69d;
-    --pastel-purple: #d3c1f0;
-    --pastel-orange: #ffcc99;
+    --pastel-blue: #abd8f2;
+    --pastel-green: #c3e8ca;
+    --pastel-pink: #f9c9d7;
+    --pastel-yellow: #fff2bd;
+    --pastel-purple: #dfd0f5;
+    --pastel-orange: #ffd8b5;
 }
 
 * {
@@ -29,6 +29,8 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    padding: 0;
+    margin: 0;
 }
 
 /* iOS Status Bar */
@@ -85,7 +87,7 @@ body {
     border-radius: 50%;
 }
 
-/* Main App Container */
+/* Main App Container with Triple Border */
 .app-container {
     flex: 1;
     display: flex;
@@ -93,6 +95,13 @@ body {
     max-width: 100%;
     margin: 0 auto;
     position: relative;
+    box-shadow: 
+        0 0 0 8px var(--pastel-blue),    /* ชั้นแรก - สีฟ้าพาสเทล */
+        0 0 0 16px var(--pastel-green),  /* ชั้นที่สอง - สีเขียวพาสเทล */
+        0 0 0 24px var(--pastel-pink);   /* ชั้นที่สาม - สีชมพูพาสเทล */
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 30px;
 }
 
 /* Rainbow Border */
@@ -102,6 +111,8 @@ body {
     margin: 0;
     padding: 0;
     height: 100%;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .rainbow-left {
@@ -112,6 +123,7 @@ body {
         var(--pastel-yellow),
         var(--pastel-orange));
     border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
 }
 
 .rainbow-right {
@@ -122,6 +134,7 @@ body {
         var(--pastel-pink),
         var(--pastel-orange));
     border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
 }
 
 /* Content Section */
@@ -672,6 +685,15 @@ body {
     .infographic-grid {
         grid-template-columns: 1fr;
     }
+    
+    /* ปรับขอบจอสำหรับแท็บเล็ต */
+    .app-container {
+        margin: 20px;
+        box-shadow: 
+            0 0 0 6px var(--pastel-blue),
+            0 0 0 12px var(--pastel-green),
+            0 0 0 18px var(--pastel-pink);
+    }
 }
 
 @media (max-width: 480px) {
@@ -699,5 +721,14 @@ body {
     
     .tab-label {
         font-size: 10px;
+    }
+    
+    /* ปรับขอบจอสำหรับมือถือ */
+    .app-container {
+        margin: 10px;
+        box-shadow: 
+            0 0 0 4px var(--pastel-blue),
+            0 0 0 8px var(--pastel-green),
+            0 0 0 12px var(--pastel-pink);
     }
 }
