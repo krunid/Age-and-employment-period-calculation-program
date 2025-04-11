@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const tabResults = document.getElementById('tab-results');
     const calculateBtn = document.getElementById('calculate-btn');
     const recalculateBtn = document.getElementById('recalculate-btn');
+    const modeToggle = document.getElementById('mode-toggle');
+    const modeLabel = document.getElementById('mode-label');
     
     // Select Elements
     const birthDay = document.getElementById('birth-day');
@@ -24,6 +26,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const workDayOfWeek = document.getElementById('work-day-of-week');
     const workAgeResult = document.getElementById('work-age-result');
     const workAgeSliderFill = document.getElementById('work-age-slider-fill');
+    const retirementDateContainer = document.getElementById('retirement-date-container');
+    const retirementDateResult = document.getElementById('retirement-date-result');
+    const retirementDayOfWeek = document.getElementById('retirement-day-of-week');
+    
+    // ตั้งค่าเริ่มต้น
+    let isGovernmentMode = false;
+    if (modeToggle) {
+        modeToggle.checked = false;
+    }
     
     // ข้อมูลสำหรับการสร้างตัวเลือก
     const thaiMonths = [
@@ -154,6 +165,31 @@ document.addEventListener('DOMContentLoaded', function() {
         return result.trim() || "0 วัน";
     }
     
+    // คำนวณวันเกษียณอายุราชการ
+    function calculateRetirementDate(birthDate) {
+        // สร้างวันที่เกษียณ (อายุ 60 ปี)
+        const retirementDate = new Date(birthDate);
+        retirementDate.setFullYear(birthDate.getFullYear() + 60);
+        
+        // ตรวจสอบว่าเกิดหลัง 1 ตุลาคมหรือไม่
+        if (birthDate.getMonth() >= 9) { // เดือนตุลาคมคือ index 9 (0-indexed)
+            // ถ้าเกิดตั้งแต่ 1 ตุลาคมเป็นต้นไป ให้เพิ่มอีก 1 ปี
+            retirementDate.setFullYear(retirementDate.getFullYear() + 1);
+        }
+        
+        return retirementDate;
+    }
+    
+    // ล้างข้อมูลการเลือก
+    function clearInputs() {
+        birthDay.selectedIndex = 0;
+        birthMonth.selectedIndex = 0;
+        birthYear.selectedIndex = 0;
+        workDay.selectedIndex = 0;
+        workMonth.selectedIndex = 0;
+        workYear.selectedIndex = 0;
+    }
+    
     // คำนวณและแสดงผลลัพธ์
     function showResults() {
         // ตรวจสอบว่าได้เลือกข้อมูลครบทุกช่องหรือไม่
@@ -240,6 +276,28 @@ document.addEventListener('DOMContentLoaded', function() {
         const workAgePercentage = Math.min(100, (workAge.years / 50) * 100);
         workAgeSliderFill.style.width = `${workAgePercentage}%`;
         
+        // ถ้าเป็นโหมดราชการ ให้แสดงข้อมูลเกษียณอายุ
+        if (isGovernmentMode) {
+            // คำนวณวันเกษียณ
+            const retirementDate = calculateRetirementDate(birthDate);
+            
+            // แสดงวันเกษียณ
+            retirementDateResult.textContent = formatThaiDate(
+                retirementDate.getDate(),
+                retirementDate.getMonth() + 1,
+                retirementDate.getFullYear()
+            );
+            
+            // แสดงวันในสัปดาห์สำหรับวันเกษียณ
+            retirementDayOfWeek.textContent = `ตรงกับ${thaiDaysOfWeek[retirementDate.getDay()]}`;
+            
+            // แสดงส่วนของวันเกษียณ
+            retirementDateContainer.style.display = 'block';
+        } else {
+            // ซ่อนส่วนของวันเกษียณเมื่ออยู่ในโหมดทั่วไป
+            retirementDateContainer.style.display = 'none';
+        }
+        
         // สลับไปยังหน้าผลลัพธ์
         switchPage('page-results');
     }
@@ -250,5 +308,20 @@ document.addEventListener('DOMContentLoaded', function() {
     tabResults.addEventListener('click', () => switchPage('page-results'));
     
     calculateBtn.addEventListener('click', showResults);
-    recalculateBtn.addEventListener('click', () => switchPage('page-input'));
+    recalculateBtn.addEventListener('click', () => {
+        clearInputs(); // ล้างข้อมูลการเลือก
+        switchPage('page-input');
+    });
+    
+    // Event listener สำหรับการเปลี่ยนโหมด
+    if (modeToggle) {
+        modeToggle.addEventListener('change', function() {
+            isGovernmentMode = this.checked;
+            
+            // อัปเดตข้อความแสดงโหมด
+            if (modeLabel) {
+                modeLabel.textContent = isGovernmentMode ? 'ราชการ' : 'ทั่วไป';
+            }
+        });
+    }
 });

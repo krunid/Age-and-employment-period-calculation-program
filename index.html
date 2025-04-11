@@ -111,6 +111,15 @@
                         <h2 class="input-title">กรอกข้อมูล</h2>
                         <p class="input-description">กรุณากรอกวันเดือนปีเกิดและวันเดือนปีที่เข้าทำงาน</p>
                         
+                        <!-- Mode Toggle Switch -->
+                        <div class="mode-toggle-container">
+                            <label class="switch">
+                                <input type="checkbox" id="mode-toggle">
+                                <span class="slider round"></span>
+                            </label>
+                            <span class="mode-label" id="mode-label">ทั่วไป</span>
+                        </div>
+                        
                         <div class="date-input-container">
                             <div class="date-group">
                                 <h3 class="date-group-title">วันเดือนปีเกิด</h3>
@@ -198,6 +207,16 @@
                             <div class="result-slider">
                                 <div class="result-slider-fill" id="work-age-slider-fill"></div>
                             </div>
+                        </div>
+                        
+                        <!-- ส่วนแสดงวันเกษียณอายุราชการ (จะแสดงเฉพาะในโหมดราชการ) -->
+                        <div class="result-card" id="retirement-date-container" style="display: none;">
+                            <div class="result-label">
+                                <span>วันเกษียณอายุราชการ</span>
+                                <span>🏆</span>
+                            </div>
+                            <div class="result-value" id="retirement-date-result"></div>
+                            <div class="result-note" id="retirement-day-of-week"></div>
                         </div>
                     </div>
                     
